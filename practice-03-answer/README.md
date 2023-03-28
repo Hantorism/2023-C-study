@@ -12,8 +12,8 @@
 #include <stdio.h>
 
 int main() {
-int operand1, operand2;
-char operator;
+    int operand1, operand2;
+    char operator;
 
     printf("수식 입력: ");
     scanf("%d %c %d", &operand1, &operator, &operand2);
