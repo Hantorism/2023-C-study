@@ -74,7 +74,6 @@ int main() {
 </details>
 
 </details>
-<br>
 
 ## Practice 2: 당신의 학점은?
 
@@ -146,7 +145,6 @@ int main() {
 </details>
 
 </details>
-<br>
 
 ## Practice 3: 최댓값 구하기
 
@@ -212,7 +210,6 @@ int main() {
 </details>
 
 </details>
-<br>
 
 ## Practice 4: 하나는 버려
 
@@ -288,4 +285,3 @@ int main() {
 </details>
 
 </details>
-<br>
