@@ -137,8 +137,8 @@ int main() {
 #include <stdio.h>
 #include <stdlib.h>
 
-int ** createMatrix(int size) {
-	int **matrix = (int **)calloc(size, sizeof(int *));
+int **createMatrix(int size) {
+	int **matrix = (int **)malloc(size * sizeof(int *));
 
 	for (int i = 0; i < size; i++) {
 		matrix[i] = (int *)calloc(size, sizeof(int));
@@ -155,7 +155,7 @@ void scanMatrix(int **matrix, int size) {
 	}
 }
 
-int ** productMatrix(int **matrix1, int **matrix2, int size) {
+int **productMatrix(int **matrix1, int **matrix2, int size) {
 	int **result = createMatrix(size);
 
 	for (int i = 0; i < size; i++) {
