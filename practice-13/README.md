@@ -98,6 +98,115 @@ ATM이 가지는 기능들은 총 8개가 있다.
 <summary>[Skeleton]</summary>
 
 ```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_LEN 30
+
+typedef struct Account {
+    char password[MAX_LEN];
+    char account[MAX_LEN];
+    int balance;
+} Account;
+
+typedef enum Function {
+    LOGIN = 1, RETRIEVE_BALANCE, DEPOSIT, WITHDRAW, TRANSFER, REGISTER, DELETE, END
+} Function;
+
+Account currentAccount;
+int accountNum;
+
+void login(Account *accounts, int *isLogin) {
+    //TODO
+}
+
+void retrieveBalance() {
+    //TODO
+}
+
+void deposit() {
+    //TODO
+}
+
+void withdraw() {
+    //TODO
+}
+
+void transfer(Account *accounts) {
+    //TODO
+}
+
+void registerAccount(Account *accounts, int index) {
+    //TODO
+}
+
+void deleteAccount(Account *accounts) {
+    //TODO
+}
+
+int main() {
+    printf("==========[Bank System]==========\n\n");
+    printf("등록할 계좌 수를 입력해주세요: ");
+    scanf("%d", &accountNum);
+    Account *accounts = (Account *)malloc(accountNum * sizeof(Account));
+    printf("총 %d개의 계좌를 등록할 수 있습니다\n\n", accountNum);
+
+    for (int i = 0; i < accountNum; i++) {
+        //TODO
+        printf("\n");
+    }
+
+    Function function;
+    int isLogin = 0;
+    for (int repeat = 1; repeat != 0;) {
+        printf("==========[Main Menu]==========\n");
+        printf("현재 계좌: %s\n", currentAccount.account);
+        printf("1. 로그인(계좌 변경)\n");
+        printf("2. 잔액 조회\n");
+        printf("3. 입금\n");
+        printf("4. 출금\n");
+        printf("5. 이체\n");
+        printf("6. 계좌 등록\n");
+        printf("7. 계좌 삭제\n");
+        printf("8. 종료\n");
+        printf("원하는 기능을 입력해주세요: ");
+        scanf("%d", &function);
+
+        switch (function) {
+            case LOGIN:
+                //TODO
+                break;
+            case RETRIEVE_BALANCE:
+                //TODO
+                break;
+            case DEPOSIT:
+                //TODO
+                break;
+            case WITHDRAW:
+                //TODO
+                break;
+            case TRANSFER:
+                //TODO
+                break;
+            case REGISTER:
+                //TODO
+                break;
+            case DELETE:
+                //TODO
+                break;
+            case END:
+                //TODO
+                break;
+            default:
+                printf("올바른 기능을 선택해주세요\n");
+                break;
+        }
+        printf("\n");
+    }
+
+    free(accounts);
+    return 0;
+}
 
 ```
 
