@@ -211,3 +211,231 @@ int main() {
 ```
 
 </details>
+
+<details>
+<summary>[Solution]</summary>
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_LEN 30
+
+typedef struct Account {
+    char password[MAX_LEN];
+    char account[MAX_LEN];
+    int balance;
+} Account;
+
+typedef enum Function {
+    LOGIN = 1, RETRIEVE_BALANCE, DEPOSIT, WITHDRAW, TRANSFER, REGISTER, DELETE, END
+} Function;
+
+Account currentAccount;
+int accountNum;
+
+void login(Account *accounts, int *isLogin) {
+    char account[MAX_LEN];
+    char password[MAX_LEN];
+    printf("접속할 계좌번호를 입력해주세요: ");
+    scanf("%s", account);
+
+    for (int i = 0; i < accountNum; i++) {
+        if (strcmp(accounts[i].account, account) == 0) {
+            printf("비밀번호를 입력해주세요: ");
+            scanf("%s", password);
+
+            if (strcmp(accounts[i].password, password) == 0) {
+                printf("해당 계좌로 접속합니다\n");
+                *isLogin = 1;
+                currentAccount = accounts[i];
+            } else {
+                printf("잘못된 비밀번호를 입력했습니다\n");
+                *isLogin = 0;
+            }
+            return;
+        }
+    }
+    printf("등록된 계좌 중 일치하는 계좌가 없습니다\n");
+    *isLogin = 0;
+}
+
+void retrieveBalance() {
+    printf("계좌에 있는 잔액은 %d만원입니다\n", currentAccount.balance);
+}
+
+void deposit() {
+    int amount;
+    printf("얼마를 입금하시겠습니까(만원 단위): ");
+    scanf("%d", &amount);
+    currentAccount.balance += amount;
+    printf("%d만원이 입금되었습니다\n", amount);
+}
+
+void withdraw() {
+    int amount;
+    printf("얼마를 출금하시겠습니까(만원 단위): ");
+    scanf("%d", &amount);
+
+    if (amount > currentAccount.balance) {
+        printf("현재 계좌의 잔액보다 많은 돈을 출금할 수 없습니다\n");
+        return;
+    }
+
+    currentAccount.balance -= amount;
+    printf("%d만원이 출금되었습니다\n", amount);
+}
+
+void transfer(Account *accounts) {
+    int amount;
+    char account[MAX_LEN];
+
+    printf("얼마를 이체하시겠습니까(만원 단위): ");
+    scanf("%d", &amount);
+
+    if (amount > currentAccount.balance) {
+        printf("잔액이 부족합니다\n");
+        return;
+    }
+
+    printf("이체할 계좌번호를 입력해주세요: ");
+    scanf("%s", account);
+
+    for (int i = 0; i < accountNum; i++) {
+        if (strcmp(accounts[i].account, account) == 0) {
+            currentAccount.balance -= amount;
+            accounts[i].balance += amount;
+            printf("%d만원을 %s에 이체했습니다\n", amount, accounts[i].account);
+            return;
+        }
+    }
+    printf("등록된 계좌 중 일치하는 계좌가 없습니다\n");
+}
+
+void registerAccount(Account *accounts, int index) {
+    printf("등록할 계좌의 정보를 입력해주세요\n");
+
+    printf("계좌번호: ");
+    scanf("%s", accounts[index].account);
+
+    printf("비밀번호: ");
+    scanf("%s", accounts[index].password);
+
+    printf("잔액(만원 단위): ");
+    scanf("%d", &accounts[index].balance);
+
+    printf("해당 계좌가 등록되었습니다\n");
+}
+
+void deleteAccount(Account *accounts) {
+    char account[MAX_LEN];
+    char password[MAX_LEN];
+    printf("삭제할 계좌번호를 입력해주세요: ");
+    scanf("%s", account);
+
+    for (int i = 0; i < accountNum; i++) {
+        if (strcmp(accounts[i].account, account) == 0) {
+            printf("비밀번호를 입력해주세요: ");
+            scanf("%s", password);
+
+            if (strcmp(accounts[i].password, password) == 0) {
+                for (int j = i; j < accountNum - 1; j++) {
+                    accounts[j] = accounts[j + 1];
+                }
+                printf("해당 계좌가 삭제되었습니다\n");
+            } else {
+                printf("잘못된 비밀번호를 입력했습니다\n");
+            }
+            return;
+        }
+    }
+    printf("등록된 계좌 중 일치하는 계좌가 없습니다\n");
+}
+
+int main() {
+    printf("==========[Bank System]==========\n\n");
+    printf("등록할 계좌 수를 입력해주세요: ");
+    scanf("%d", &accountNum);
+    Account *accounts = (Account *)malloc(accountNum * sizeof(Account));
+    printf("총 %d개의 계좌를 등록할 수 있습니다\n\n", accountNum);
+
+    for (int i = 0; i < accountNum; i++) {
+        registerAccount(accounts, i);
+        printf("\n");
+    }
+
+    Function function;
+    int isLogin = 0;
+    for (int repeat = 1; repeat != 0;) {
+        printf("==========[Main Menu]==========\n");
+        printf("현재 계좌: %s\n", currentAccount.account);
+        printf("1. 로그인(계좌 변경)\n");
+        printf("2. 잔액 조회\n");
+        printf("3. 입금\n");
+        printf("4. 출금\n");
+        printf("5. 이체\n");
+        printf("6. 계좌 등록\n");
+        printf("7. 계좌 삭제\n");
+        printf("8. 종료\n");
+        printf("원하는 기능을 입력해주세요: ");
+        scanf("%d", &function);
+
+        switch (function) {
+            case LOGIN:
+                login(accounts, &isLogin);
+                break;
+            case RETRIEVE_BALANCE:
+                if (isLogin) {
+                    retrieveBalance();
+                } else {
+                    printf("로그인 후 시도해주시기 바랍니다\n");
+                }
+                break;
+            case DEPOSIT:
+                if (isLogin) {
+                    deposit();
+                } else {
+                    printf("로그인 후 시도해주시기 바랍니다\n");
+                }
+                break;
+            case WITHDRAW:
+                if (isLogin) {
+                    withdraw();
+                } else {
+                    printf("로그인 후 시도해주시기 바랍니다\n");
+                }
+                break;
+            case TRANSFER:
+                if (isLogin) {
+                    transfer(accounts);
+                } else {
+                    printf("로그인 후 시도해주시기 바랍니다\n");
+                }
+                break;
+            case REGISTER:
+                accountNum++;
+                accounts = (Account *)realloc(accounts, accountNum * sizeof(Account));
+                registerAccount(accounts, accountNum - 1);
+                break;
+            case DELETE:
+                deleteAccount(accounts);
+                accountNum--;
+                accounts = (Account *)realloc(accounts, accountNum * sizeof(Account));
+                break;
+            case END:
+                printf("ATM을 종료합니다\n");
+                repeat = 0;
+                break;
+            default:
+                printf("올바른 기능을 선택해주세요\n");
+                break;
+        }
+        printf("\n");
+    }
+
+    free(accounts);
+    return 0;
+}
+```
+
+</details>
